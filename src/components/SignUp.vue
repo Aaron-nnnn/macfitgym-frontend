@@ -4,7 +4,7 @@ import { ref } from 'vue'
   const rules = {
     required: value => !!value || 'Required.',
     min: v => v.length >= 8 || 'Min 8 characters',
-    emailMatch: () => (`The email and password you entered don't match`),
+    passwordMatch: () => password === confirmPassword || 'Passwords must match'
   }
 
   const show1 = ref(false)
@@ -13,16 +13,48 @@ import { ref } from 'vue'
 
   const confirmPassword = ref(null)
   const show1confirm = ref(false)
+
+// models
+const firstName = ref(null)
+const lastName = ref(null)
+const email = ref(null)
+const gender = ref(null)
+const phoneNumber = ref(null)
+const dob = ref(null)
+const gymLocation = ref(null)
+
+function signUp(){
+    // create user object
+
+    const userDetails={
+        name: firstName.value + lastName.value,
+        email: email.value,
+        phone: phoneNumber.value,
+        dob: dob.value,
+        gender: gender.value,
+        gymLocation: gymLocation.value,
+        password: password.value,
+    }
+
+    // store this data
+
+    try{
+        localStorage.setItem('userDetails', JSON.stringify(userDetails))
+    }catch (err) {
+        console.error('Sign up process failed', err)
+    }
+}
+
 </script>
 
 <template>
-    <v-container  width="50%" class="text-center mt-12">
+    <v-container  width="50%" class="text-center mt-12" style="background-color:#FFFAF0">
         <v-row>
             <v-col md="12">
                 <v-form>
                     <v-row>
                         <v-col md="12">
-                            <v-icon color="#FFDDAA" icon="mdi-dumbbell" size="x-large" ></v-icon>
+                            <v-img src="Download Free Vectors, Images, Photos & Videos _ Vecteezy.jpg" width="40%" height="40%"></v-img>
                         </v-col>
                     </v-row>
                     <v-row>
@@ -35,7 +67,7 @@ import { ref } from 'vue'
                             <div class="text-title-large font-weight-medium text-right">Firstname</div>
                         </v-col>
                         <v-col md="6">
-                            <v-text-field variant="outlined"></v-text-field>
+                            <v-text-field variant="outlined" v-model="firstName"></v-text-field>
                         </v-col>
                     </v-row>
                      <v-row>
@@ -43,7 +75,7 @@ import { ref } from 'vue'
                             <div class="text-title-large font-weight-medium text-right">Lastname</div>
                         </v-col>
                         <v-col md="6">
-                            <v-text-field variant="outlined"></v-text-field>
+                            <v-text-field variant="outlined" v-model="lastName"></v-text-field>
                         </v-col>
                     </v-row>
                      <v-row>
@@ -51,7 +83,7 @@ import { ref } from 'vue'
                             <div class="text-title-large font-weight-medium text-right">Email</div>
                         </v-col>
                         <v-col md="6">
-                            <v-text-field variant="outlined"></v-text-field>
+                            <v-text-field variant="outlined" v-model="email"></v-text-field>
                         </v-col>
                     </v-row>
                      <v-row>
@@ -59,7 +91,7 @@ import { ref } from 'vue'
                             <div class="text-title-large font-weight-medium text-right">Gender</div>
                         </v-col>
                         <v-col md="6">
-                           <v-radio-group inline>
+                           <v-radio-group inline v-model="gender">
                            <v-radio label="Male" value="male"></v-radio>
                            <v-radio label="Female" value="female"></v-radio>
                            <v-radio label="Other" value="other"></v-radio>
@@ -71,7 +103,7 @@ import { ref } from 'vue'
                             <div class="text-title-large font-weight-medium text-right">Phone Number</div>
                         </v-col>
                         <v-col md="6">
-                            <v-text-field variant="outlined" type="number"></v-text-field>
+                            <v-text-field variant="outlined" type="number" v-model="phoneNumber"></v-text-field>
                         </v-col>
                     </v-row>
                      <v-row>
@@ -79,7 +111,7 @@ import { ref } from 'vue'
                             <div class="text-title-large font-weight-medium text-right">Date of birth</div>
                         </v-col>
                         <v-col md="6">
-                            <v-date-input variant="outlined"></v-date-input>
+                            <v-date-input variant="outlined" v-model="dob"></v-date-input>
                         </v-col>
                     </v-row>
                      <v-row>
@@ -91,6 +123,7 @@ import { ref } from 'vue'
                                 label="Select"
                                 :items="['CBD', 'Madaraka', 'Westlands', 'Buruburu']"
                                 variant="outlined"
+                                v-model="gymLocation"
                             ></v-select>
                         </v-col>
                     </v-row>
@@ -117,7 +150,7 @@ import { ref } from 'vue'
                             <v-text-field
                                 v-model="confirmPassword"
                                 :append-icon="show1confirm ? 'mdi-eye' : 'mdi-eye-off'"
-                                :rules="[rules.required, rules.min]"
+                                :rules="[rules.required, rules.min, rules.passwordMatch]"
                                 :type="show1confirm ? 'text' : 'password'"
                                 variant="outlined"
                                 @click:append="show1confirm = !show1confirm"
@@ -126,12 +159,14 @@ import { ref } from 'vue'
                     </v-row>
                     <v-row>
                         <v-col md="12">
-                            <v-btn color="#FFDDAA" variant="filled">Login</v-btn>
+                            <v-btn color="#FFDDAA" variant="elevated" @click="signUp">Sign up</v-btn>
                         </v-col>
                     </v-row>
                     <v-row>
                         <v-col md="12">
-                            <div>New to MacFit Gym? Create an account</div>
+                            <div>Already have an account?
+                                <router-link to="/login">Back to Login</router-link>
+                            </div>
                         </v-col>
                     </v-row>
                 </v-form>

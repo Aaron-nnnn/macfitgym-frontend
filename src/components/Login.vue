@@ -1,5 +1,8 @@
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
   const rules = {
     required: value => !!value || 'Required.',
@@ -10,10 +13,24 @@ import { ref } from 'vue'
   const show1 = ref(false)
   const show2 = ref(true)
   const password = ref(null)
+  const username = ref(null)
+
+function login(){
+    const userDetails = JSON.parse(localStorage.getItem('userDetails'))
+    if (username.value == userDetails.email && password.value == userDetails.password){
+        // proceed to Home Page
+        router.push('/homepage')
+        localStorage.setItem("isLoggedIn", true);
+
+    }else{
+        console.log('Invalid credentials. Try again')
+    }
+}
+
 </script>
 
 <template>
-    <v-container width="50%" class="text-center mt-12">
+    <v-container width="50%" class="text-center mt-12" style="background-color:#FFFAF0">
         <v-row>
             <v-col md="12">
                 <v-form>
@@ -32,7 +49,7 @@ import { ref } from 'vue'
                             <div class="text-title-large font-weight-medium text-right">Username</div>
                         </v-col>
                         <v-col md="6">
-                            <v-text-field variant="outlined"></v-text-field>
+                            <v-text-field variant="outlined" v-model="username"></v-text-field>
                         </v-col>
                     </v-row>
                      <v-row>
@@ -52,12 +69,14 @@ import { ref } from 'vue'
                     </v-row>
                     <v-row>
                         <v-col md="12">
-                            <v-btn color="#FFDDAA" variant="filled">Login</v-btn>
+                            <v-btn color="#FFDDAA" variant="elevated" @click="login">Login</v-btn>
                         </v-col>
                     </v-row>
                     <v-row>
                         <v-col md="12">
-                            <div>New to MacFit Gym? Create an account</div>
+                            <div>New to MacFit Gym? 
+                                <router-link to="/signup">Create an account</router-link>
+                            </div>
                         </v-col>
                     </v-row>
                 </v-form>
