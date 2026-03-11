@@ -36,7 +36,7 @@ function login(){
                 <v-form>
                     <v-row>
                         <v-col md="12">
-                            <v-icon color="#FFDDAA" icon="mdi-dumbbell" size="x-large" ></v-icon>
+                            <v-img src="Letter M logo template. Unique modern creative elegant logotype (1).jpg"  class="mx-auto" width="400" height="200"></v-img>
                         </v-col>
                     </v-row>
                     <v-row>

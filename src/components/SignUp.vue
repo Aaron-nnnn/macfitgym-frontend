@@ -54,7 +54,7 @@ function signUp(){
                 <v-form>
                     <v-row>
                         <v-col md="12">
-                            <v-img src="Download Free Vectors, Images, Photos & Videos _ Vecteezy.jpg" width="40%" height="40%"></v-img>
+                            <v-img src="Letter M logo template. Unique modern creative elegant logotype (1).jpg"  class="mx-auto" width="400" height="200"></v-img>
                         </v-col>
                     </v-row>
                     <v-row>
