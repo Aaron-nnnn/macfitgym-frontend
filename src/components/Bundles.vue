@@ -1,5 +1,33 @@
 <script setup>
+import {ref} from 'vue'
+import {useRouter} from "vue-router";
 
+const router = useRouter();
+
+const showBundleDialog = ref(false)
+const isLoggedIn = localStorage.getItem("isLoggedIn")
+const selectedBundle = ref(null)
+const selectedPrice = ref(null)
+
+function showBundle(name, price){
+    if(isLoggedIn){
+        selectedBundle.value = name
+        selectedPrice.value = price
+        showBundleDialog.value = true
+    }else{
+        router.push('/login')
+    }
+}
+function subscribe(){
+    const userDetails = JSON.parse(localStorage.getItem('userDetails'))
+    userDetails.subscription ={
+        name: selectedBundle.value,
+        price: selectedPrice.value
+    }
+
+    localStorage.setItem('userDetails', JSON.stringify(userDetails))
+    showBundleDialog.value = false
+}
 </script>
 
 <template>
@@ -7,30 +35,33 @@
         <v-row>
             <div class="text-display-medium mb-12">Gym Packages</div>
         </v-row>
+         <v-row>
+            <div class="text-label-medium font-italic">Click on a bundle to subscribe</div>
+        </v-row>
         <v-row>
             <v-col md="3">
-                <v-card class="text-center">
+                <v-card class="text-center" @click="showBundle('Daily Pass', 800)">
                     <v-icon color="#FFDDAA" icon="mdi-calendar-clock-outline" size="large" class="mt-8"></v-icon>
                     <v-card-title color="#FFDDAA">Daily Pass</v-card-title>
                     <v-card-text>Ksh 800</v-card-text>
                 </v-card>
             </v-col>
             <v-col md="3">
-                <v-card class="text-center">
+                <v-card class="text-center"  @click="showBundle('1 Month', 5500)">
                     <v-icon color="#FFDDAA" icon="mdi-calendar-clock-outline" size="large" class="mt-8"></v-icon>
                     <v-card-title color="#FFDDAA">1 Month</v-card-title>
                     <v-card-text>Ksh 5,500</v-card-text>
                 </v-card>
             </v-col>
             <v-col md="3">
-                <v-card class="text-center">
+                <v-card class="text-center" @click="showBundle('3 Months', 15000)">
                     <v-icon color="#FFDDAA" icon="mdi-calendar-clock-outline" size="large" class="mt-8"></v-icon>
                     <v-card-title color="#FFDDAA">3 Months</v-card-title>
                     <v-card-text>Ksh 15,000</v-card-text>
                 </v-card>
             </v-col>
             <v-col md="3">
-                <v-card class="text-center">
+                <v-card class="text-center" @click="showBundle('6 Months', 29000)">
                     <v-icon color="#FFDDAA" icon="mdi-calendar-clock-outline" size="large" class="mt-8"></v-icon>
                     <v-card-title color="#FFDDAA">6 Months</v-card-title>
                     <v-card-text>Ksh 29000</v-card-text>
@@ -39,7 +70,7 @@
         </v-row>
         <v-row>
             <v-col md="12">
-                <v-card class="text-center">
+                <v-card class="text-center" @click="showBundle('Annual', 55000)">
                     <v-icon color="#FFDDAA" icon="mdi-calendar-clock-outline" size="large" class="mt-8"></v-icon>
                     <v-card-title color="#FFDDAA">Annual</v-card-title>
                     <v-card-text>Ksh 55,000</v-card-text>
@@ -114,4 +145,21 @@
             </v-col>
         </v-row>
      </v-container>
+     <!-- Dialog -->
+      <v-dialog v-model="showBundleDialog" max-width="600" >
+
+      <v-card prepend-icon="mdi-account" title="Subscribe to Bundle" >
+        <v-card-text>
+          You are about to subscribe to {{ selectedBundle }} at {{ selectedPrice }}. Click on the button below to complete payment
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+         <v-spacer></v-spacer>
+          <v-btn text="Close" variant="plain" @click="showBundleDialog = false" ></v-btn>
+          <v-btn color="primary" variant="tonal" @click="subscribe()" >Subscribe</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 </template>
