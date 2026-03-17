@@ -1,12 +1,12 @@
 <script setup>
-const userDetails = JSON.parse(localStorage.getItem('userDetails'))
+const userDetails = JSON.parse(localStorage.getItem('user'))
 </script>
 
 <template>
     <v-container width="50%" style="background-color:#FFFAF0" class="mt-12">
         <V-row>
             <v-col>
-                <v-card>
+                <v-card width="50%">
                     <v-img src="" class="h-50" cover></v-img>
                     <v-card-title>{{ userDetails.name }}</v-card-title>
                     <v-card-text>{{  userDetails.email }}</v-card-text>

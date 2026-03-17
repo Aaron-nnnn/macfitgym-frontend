@@ -1,8 +1,11 @@
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
+import {useAuth} from '../services/auth'
 
 const router = useRouter();
+
+const { login, loading, error } = useAuth()
 
   const rules = {
     required: value => !!value || 'Required.',
@@ -15,16 +18,27 @@ const router = useRouter();
   const password = ref(null)
   const username = ref(null)
 
-function login(){
-    const userDetails = JSON.parse(localStorage.getItem('userDetails'))
-    if (username.value == userDetails.email && password.value == userDetails.password){
-        // proceed to Home Page
-        router.push('/homepage')
-        localStorage.setItem("isLoggedIn", true);
-
-    }else{
-        console.log('Invalid credentials. Try again')
-    }
+  async function handleLogin() {
+  
+  if (!username.value || !password.value) {
+    console.error('Email and password are required')
+    return
+  }
+  
+  try {
+    await login({
+      email: username.value,
+      password: password.value
+    })
+   
+    // Redirect after successful login
+    router.push('/homepage').then(() => {
+        router.go(0); // Reloads the current route
+    });
+  } catch (err) {
+    // Error is already handled by the auth service
+    console.error('Login failed', err)
+  }
 }
 
 </script>
@@ -69,7 +83,7 @@ function login(){
                     </v-row>
                     <v-row>
                         <v-col md="12">
-                            <v-btn color="#FFDDAA" variant="elevated" @click="login">Login</v-btn>
+                            <v-btn color="#FFDDAA" variant="elevated" @click="handleLogin">Login</v-btn>
                         </v-col>
                     </v-row>
                     <v-row>
